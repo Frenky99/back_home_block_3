@@ -10,14 +10,23 @@
 const {io} = require("socket.io-client")
 const socket = io("http://localhost:3001")
 
+socket.on("connected", (arg) => {
+  console.log(arg);
+});
+
 export default {
   name: 'App'
 }
 </script>
 
 <style>
+@font-face {
+  font-family: "Comic-Sans-MS";
+  src: url(./fonts/Comic-Sans-MS.woff);
+}
+
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: Comic-Sans-MS;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
