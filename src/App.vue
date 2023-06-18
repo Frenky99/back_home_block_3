@@ -6,6 +6,15 @@
   <router-view/>
 </template>
 
+<script>
+const {io} = require("socket.io-client")
+const socket = io("http://localhost:3001")
+
+export default {
+  name: 'App'
+}
+</script>
+
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
