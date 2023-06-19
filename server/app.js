@@ -7,7 +7,7 @@ const { Server } = require("socket.io");
  */
 const app = express();
 /**
- * Инициализация приложения на express из документации
+ * Инициализация приложения сервера socket на express
  */
 const httpServer = createServer(app);
 const io = new Server(httpServer, {
@@ -33,19 +33,25 @@ app.listen(3000, async () => {
 
 io.on("connection", (socket) => {
   // здесь выполняется вся основная логика, вся основная работа внутри данного объекта
-  socket.emit("connected", {
-    message: "Успешное подключение",
-  });
+  socket.on("message", (data) => {
 
-  // отлавливаем событие под названием message
-  socket.on("message", (arg) => {
-    console.log(arg);
-  });
-
-  socket.on("disconnect", (reason) => {
-    console.log("Успешное отключение");
-    console.log(reason);
+    // мы подписались на данный канал, чтобы прослушивать его изменения
+    socket.join("room:" + data.room_id)
+    // мы использовали to для отправки событий в необходимую комнату
+    io.to("room:" + data.room_id).emit("message", data.message)
+    // покидаем комнату ??????????????
+    // socket.leave("room:" + data.room_id)
   });
 });
+
+/**
+ * Каждые 10 секунд мы будем отправлять событие ping на каждого подключенного клиента и в этом объекте выводить серверное время
+ */
+
+// setInterval(() => {
+//   io.emit("ping", {
+//     ts: new Date(),
+//   });
+// }, 10000);
 
 httpServer.listen(3001);
